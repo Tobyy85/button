@@ -29,8 +29,9 @@ void Button::update(){
 
 String Button::get(){
 
+    // vzdycky musim jit od index pozpatku a kdyz narazim ze nejaky uz se nepocita jako klik, tka nepokracovat a return 
+    // udelat funkci, ktera mi vrati jenom hodnoty serazeny s kteryma budu pracovat + kolik jich je (z kterych budu zjistovat jestli jsou po sobe vubec)
 }
-
 
 String Button::get_position(){
     return this->position;

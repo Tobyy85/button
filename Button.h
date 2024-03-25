@@ -8,18 +8,23 @@ class Button{
     public:
         Button(int pin, bool input_pullup = true);
         void update();
-        String get();
         String get_position();
+        String get();
 
     private:
         int pin;
         int state;
         int last_state;
-        static const int max_values = 5;
-        unsigned long clicks_time[max_values][2] = {};
-        bool reset = false; 
         int clicks_index = 0;
         String position;
+        int long_click = 500;
+        int double_click = 250;
+        bool reset = false; 
+
+
+        static const int max_values = 3;
+        unsigned long clicks_time[max_values][2] = {};
+        String clicks_names[4] = {"NO CLICK", "SINGLE CLICK", "DOUBLE CLICK", "TRIPLE CLICK"};
 
 };
 

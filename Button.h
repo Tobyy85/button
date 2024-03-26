@@ -6,9 +6,10 @@
 
 class Button{
     public:
-        Button(int pin, bool input_pullup = true);
+        Button(int pin);
         void update();
         String get_position();
+        long** get_sorted_values(unsigned long time_arr[][2], int current_index);
         String get();
 
     private:
@@ -16,10 +17,11 @@ class Button{
         int state;
         int last_state;
         int clicks_index = 0;
-        String position;
+        String position = "UP";
         int long_click = 500;
         int double_click = 250;
         bool reset = false; 
+        
 
 
         static const int max_values = 3;

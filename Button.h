@@ -23,9 +23,9 @@ class Button{
         int clicks_index = 0;
         String position = "UP";
         int long_click = 500;
-        int multiple_click = 250;
-        bool reached_max_values = false; 
-        bool returned = false;
+        int multiple_click = 500;
+        bool reached_max_values = false;
+        bool returned = true;
         
         static const int max_values = 3;
         unsigned long clicks_time[max_values][2] = {};

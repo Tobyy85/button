@@ -15,10 +15,10 @@ void Button::update(){
     this->clicks_time[this->clicks_index][1] = millis();
     this->position = "DOWN";
     this->returned = false;
-    if (this->clicks_index < this->max_values){
+    if (this->clicks_index < this->max_values-1){
       this->clicks_index++;
     }else{
-      this->clicks_index = 1;
+      this->clicks_index = 0;
       this->reached_max_values = true;
     }
   }
@@ -31,7 +31,7 @@ long** Button::get_sorted_values(unsigned long time_arr[][2], int current_index)
     new_arr[i] = new long[2];
   }
   
-  for (int i = current_index-1, j = 0; i > current_index - this->max_values -1; i--, j++){
+  for (int i = current_index-1, j = 0; i > current_index - this->max_values-1; i--, j++){
     int index = i;
     if (i < 0){
       index = this->max_values + i;
@@ -61,6 +61,9 @@ bool Button::is_triple_click(long** sorted_values){
   return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click && sorted_values[1][1] - sorted_values[2][0] < this->multiple_click;
 }
 
+//TODO - implement click + long click
+// TODO - add option to wait before showing single click if it's not a double or triple click
+
 String Button::get(){
   update();
   long** sorted_values = get_sorted_values(this->clicks_time, this->clicks_index);
@@ -83,7 +86,7 @@ String Button::get(){
       click_type = "SINGLE CLICK";
     }
   }
-  
+
   for (int i = 0; i < max_values; i++){
     delete[] sorted_values[i];
   }

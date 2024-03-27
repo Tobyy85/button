@@ -1,3 +1,7 @@
+//TODO - implement click + long click
+//TODO - add option to wait before showing single click if it's not a double or triple click
+//TODO - add option to use pinMode(pin, INPUT) instead of INPUT_PULLUP
+
 #include "Button.h"
 
 Button::Button(int pin){
@@ -58,9 +62,6 @@ bool Button::is_double_click(long** sorted_values){
 bool Button::is_triple_click(long** sorted_values){
   return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click && sorted_values[1][1] - sorted_values[2][0] < this->multiple_click;
 }
-
-//TODO - implement click + long click
-// TODO - add option to wait before showing single click if it's not a double or triple click
 
 String Button::get(){
   update();

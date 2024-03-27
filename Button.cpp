@@ -39,7 +39,6 @@ long** Button::get_sorted_values(unsigned long time_arr[][2], int current_index)
 
     new_arr[j][0] = time_arr[index][0];
     new_arr[j][1] = time_arr[index][1];
-
   }
   return new_arr;
 }
@@ -50,15 +49,16 @@ bool Button::is_long_click(long** sorted_values){
 }
 
 bool Button::is_single_click(long** sorted_values){
-  return sorted_values[0][1] - sorted_values[0][0] < this->long_click;
+  int difference = sorted_values[0][1] - sorted_values[0][0];
+  return 0 < difference && difference < this->long_click;
 }
 
 bool Button::is_double_click(long** sorted_values){
-  
+  return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click;
 }
 
 bool Button::is_triple_click(long** sorted_values){
-
+  return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click && sorted_values[1][1] - sorted_values[2][0] < this->multiple_click;
 }
 
 String Button::get(){
@@ -71,13 +71,19 @@ String Button::get(){
       this->returned = true;
       click_type = "LONG CLICK";
   }else{
-    //single click
-    if (is_single_click(sorted_values) && !this->returned){
+    //triple click
+    if (is_triple_click(sorted_values) && !this->returned){
+      this->returned = true;
+      click_type = "TRIPLE CLICK";
+    }else if (is_double_click(sorted_values) && !this->returned){ //double click
+      this->returned = true;
+      click_type = "DOUBLE CLICK";
+    }else if (is_single_click(sorted_values) && !this->returned){ //single click
       this->returned = true;
       click_type = "SINGLE CLICK";
     }
   }
-
+  
   for (int i = 0; i < max_values; i++){
     delete[] sorted_values[i];
   }

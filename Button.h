@@ -23,7 +23,7 @@ class Button{
         int clicks_index = 0;
         String position = "UP";
         int long_click = 500;
-        int double_click = 250;
+        int multiple_click = 250;
         bool reached_max_values = false; 
         bool returned = false;
         

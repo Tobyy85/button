@@ -24,12 +24,10 @@ class Button{
         String position = "UP";
         int long_click = 500;
         int multiple_click = 500;
-        bool reached_max_values = false;
         bool returned = true;
         
         static const int max_values = 3;
         unsigned long clicks_time[max_values][2] = {};
-        String clicks_names[4] = {"NO CLICK", "SINGLE CLICK", "DOUBLE CLICK", "TRIPLE CLICK"};
 };
 
 #endif

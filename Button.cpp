@@ -19,7 +19,6 @@ void Button::update(){
       this->clicks_index++;
     }else{
       this->clicks_index = 0;
-      this->reached_max_values = true;
     }
   }
   this->last_state = state;
@@ -36,7 +35,6 @@ long** Button::get_sorted_values(unsigned long time_arr[][2], int current_index)
     if (i < 0){
       index = this->max_values + i;
     }
-
     new_arr[j][0] = time_arr[index][0];
     new_arr[j][1] = time_arr[index][1];
   }
@@ -69,13 +67,11 @@ String Button::get(){
   long** sorted_values = get_sorted_values(this->clicks_time, this->clicks_index);
   String click_type = "NO CLICK";
 
-  //long click
-  if (is_long_click(sorted_values) && !this->returned){
+  if (is_long_click(sorted_values) && !this->returned){ //long click
       this->returned = true;
       click_type = "LONG CLICK";
   }else{
-    //triple click
-    if (is_triple_click(sorted_values) && !this->returned){
+    if (is_triple_click(sorted_values) && !this->returned){ //triple click
       this->returned = true;
       click_type = "TRIPLE CLICK";
     }else if (is_double_click(sorted_values) && !this->returned){ //double click

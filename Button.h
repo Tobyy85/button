@@ -5,7 +5,7 @@
 
 class Button{
     public:
-        Button(int pin);
+        Button(int pin, bool input_pullup = true);
         String get_position();
         String get();
 
@@ -19,6 +19,7 @@ class Button{
         bool is_triple_click(long** sorted_values);
 
         int pin;
+        bool input_pullup;
         int state;
         int last_state;
         int clicks_index = 0;

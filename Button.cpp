@@ -1,16 +1,25 @@
-//TODO - implement click + long click
 //TODO - add option to wait before showing single click if it's not a double or triple click
 //TODO - add option to use pinMode(pin, INPUT) instead of INPUT_PULLUP
 
 #include "Button.h"
 
-Button::Button(int pin){
+Button::Button(int pin, bool input_pullup){
   this->pin = pin;
-  pinMode(pin, INPUT_PULLUP);
+  this->input_pullup = input_pullup;
+  if (input_pullup){
+    pinMode(pin, INPUT_PULLUP);
+  }else{
+    pinMode(pin, INPUT);
+  }
 }
 
 void Button::update(){
-  this->state = (digitalRead(this->pin) == LOW);
+  if (this->input_pullup){
+    this->state = (digitalRead(this->pin) == LOW);
+  }else{
+    this->state = (digitalRead(this->pin) == HIGH);
+  }
+    
   if (this->state && !this->last_state){
     this->clicks_time[this->clicks_index][0] = millis();
     this->position = "UP";

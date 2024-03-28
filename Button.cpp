@@ -1,5 +1,4 @@
 //TODO - add option to wait before showing single click if it's not a double or triple click
-//TODO - add option to use pinMode(pin, INPUT) instead of INPUT_PULLUP
 
 #include "Button.h"
 
@@ -54,7 +53,6 @@ long** Button::get_sorted_values(unsigned long time_arr[][2], int current_index)
   return new_arr;
 }
 
-
 bool Button::is_long_click(long** sorted_values){
   return sorted_values[0][1] - sorted_values[0][0] >= this->long_click;
 }
@@ -80,7 +78,7 @@ bool Button::is_press_and_hold(long** sorted_values){
   return is_single && is_double && is_long; 
 }
 
-String Button::get(){
+String Button::get(bool wait_for_multiple_click){
   update();
   long** sorted_values = get_sorted_values(this->clicks_time, this->clicks_index);
   String click_type = "NO CLICK";
@@ -92,15 +90,35 @@ String Button::get(){
       this->returned = true;
       click_type = "LONG CLICK";
   }else{
-    if (is_triple_click(sorted_values) && !this->returned){ //triple click
-      this->returned = true;
-      click_type = "TRIPLE CLICK";
-    }else if (is_double_click(sorted_values) && !this->returned){ //double click
-      this->returned = true;
-      click_type = "DOUBLE CLICK";
-    }else if (is_single_click(sorted_values) && !this->returned){ //single click
-      this->returned = true;
-      click_type = "SINGLE CLICK";
+    if (wait_for_multiple_click){
+      if (is_triple_click(sorted_values) && !this->returned){ //triple click
+        this->returned = true;
+        click_type = "TRIPLE CLICK";
+      }else if (is_double_click(sorted_values) && !this->returned){ //double click
+        this->returned = true;
+        click_type = "DOUBLE CLICK";
+        double__return_single = false;
+      }else if (is_single_click(sorted_values)){ //single click
+        if (millis() - sorted_values[0][1] >= this->multiple_click && double__return_single){
+          if (!this->returned){
+            this->returned = true;
+            click_type = "SINGLE CLICK";
+          }
+        }else{
+          double__return_single = true;
+        }
+      }
+    }else{
+      if (is_triple_click(sorted_values) && !this->returned){ //triple click
+        this->returned = true;
+        click_type = "TRIPLE CLICK";
+      }else if (is_double_click(sorted_values) && !this->returned){ //double click
+        this->returned = true;
+        click_type = "DOUBLE CLICK";
+      }else if (is_single_click(sorted_values) && !this->returned){ //single click
+        this->returned = true;
+        click_type = "SINGLE CLICK";
+      }
     }
   }
 
@@ -109,6 +127,11 @@ String Button::get(){
   }
   delete[] sorted_values;
   return click_type;
+}
+
+bool Button::is_pressed(){
+  update();
+  return this->state;
 }
 
 String Button::get_position(){

@@ -12,6 +12,7 @@ class Button{
     private:
         void update();
         long** get_sorted_values(unsigned long time_arr[][2], int current_index);
+        bool is_press_and_hold(long** sorted_values);
         bool is_long_click(long** sorted_values);
         bool is_single_click(long** sorted_values);
         bool is_double_click(long** sorted_values);
@@ -22,8 +23,8 @@ class Button{
         int last_state;
         int clicks_index = 0;
         String position = "UP";
-        int long_click = 500;
-        int multiple_click = 500;
+        int long_click = 400;
+        int multiple_click = 300;
         bool returned = true;
         
         static const int max_values = 3;

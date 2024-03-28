@@ -56,11 +56,19 @@ bool Button::is_single_click(long** sorted_values){
 }
 
 bool Button::is_double_click(long** sorted_values){
-  return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click;
+  return sorted_values[0][0] - sorted_values[1][1] < this->multiple_click;
 }
 
 bool Button::is_triple_click(long** sorted_values){
-  return sorted_values[0][1] - sorted_values[1][0] < this->multiple_click && sorted_values[1][1] - sorted_values[2][0] < this->multiple_click;
+  return sorted_values[0][0] - sorted_values[1][1] < this->multiple_click && sorted_values[1][0] - sorted_values[2][1] < this->multiple_click;
+}
+
+bool Button::is_press_and_hold(long** sorted_values){
+  int difference = sorted_values[1][1] - sorted_values[1][0];
+  bool is_single = 0 < difference && difference < this->long_click;
+  bool is_double = sorted_values[0][0] - sorted_values[1][1] < this->multiple_click;
+  bool is_long = sorted_values[0][1] - sorted_values[0][0] >= this->long_click;
+  return is_single && is_double && is_long; 
 }
 
 String Button::get(){
@@ -68,7 +76,10 @@ String Button::get(){
   long** sorted_values = get_sorted_values(this->clicks_time, this->clicks_index);
   String click_type = "NO CLICK";
 
-  if (is_long_click(sorted_values) && !this->returned){ //long click
+  if (is_press_and_hold(sorted_values) && !this->returned){ //press and hold
+    this->returned = true;
+    click_type = "PRESS AND HOLD";
+  }else if (is_long_click(sorted_values) && !this->returned){ //long click
       this->returned = true;
       click_type = "LONG CLICK";
   }else{

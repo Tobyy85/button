@@ -28,8 +28,8 @@ class Button{
         int long_click = 400;
         int multiple_click = 300;
         bool returned = true;
-        bool double__return_single = true;
-        bool triple__return_double = true;
+        bool return_single = true;
+        bool return_double = true;
         
         static const int max_values = 3;
         unsigned long clicks_time[max_values][2] = {};

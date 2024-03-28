@@ -1,4 +1,5 @@
 //TODO - add option to wait before showing single click if it's not a double or triple click
+//TODO Implemnt ^ for press and hold as well
 
 #include "Button.h"
 
@@ -93,19 +94,26 @@ String Button::get(bool wait_for_multiple_click){
     if (wait_for_multiple_click){
       if (is_triple_click(sorted_values) && !this->returned){ //triple click
         this->returned = true;
+        this->return_double = true;
         click_type = "TRIPLE CLICK";
-      }else if (is_double_click(sorted_values) && !this->returned){ //double click
-        this->returned = true;
-        click_type = "DOUBLE CLICK";
-        double__return_single = false;
+      }else if (is_double_click(sorted_values)){ //double click
+        if (millis() -  sorted_values[0][0] >= this->multiple_click && this->return_single){
+          if ( !this->returned){
+            this->returned = true;
+            this->return_double = false;
+            click_type = "DOUBLE CLICK";
+          }
+        }else{
+          this->return_double = true;
+        }
       }else if (is_single_click(sorted_values)){ //single click
-        if (millis() - sorted_values[0][1] >= this->multiple_click && double__return_single){
+        if (millis() - sorted_values[0][0] >= this->multiple_click && this->return_single){
           if (!this->returned){
             this->returned = true;
             click_type = "SINGLE CLICK";
           }
         }else{
-          double__return_single = true;
+          this->return_single = true;
         }
       }
     }else{
@@ -121,6 +129,7 @@ String Button::get(bool wait_for_multiple_click){
       }
     }
   }
+
 
   for (int i = 0; i < max_values; i++){
     delete[] sorted_values[i];

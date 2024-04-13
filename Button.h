@@ -8,7 +8,7 @@ class Button{
         Button(int pin, bool input_pullup = true, int long_click_time = 400, int multiple_click_time = 400); // int multiple_click_time = 300
         bool get_state();
         void update();
-        int get();
+        int get(bool update = true);
 
     private:
         bool pressed_down();

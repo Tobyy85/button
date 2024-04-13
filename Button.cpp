@@ -31,9 +31,9 @@ bool Button::pressed_up(){
 
 void Button::update(){
     this->last_state = this->state;
-    this->state = get_state();
+    this->state = this->get_state();
 
-    if (pressed_down()){
+    if (this->pressed_down()){
       this->last_click_down_millis = this->click_down_millis;
       this->click_down_millis = millis();
         if (click_down_millis - last_click_up_millis <= this->multiple_click_time){
@@ -45,13 +45,16 @@ void Button::update(){
       this->changed = true;
     }
 
-    if (pressed_up()){
+    if (this->pressed_up()){
       this->last_click_up_millis = this->click_up_millis;
       this->click_up_millis = millis();
     }
 }
 
-int Button::get(){  
+int Button::get(bool update){  
+  if (update){
+    this->update();
+  }
   if (millis() - this->click_down_millis > this->multiple_click_time && this->changed){
     this->changed = false;
     return this->count;
